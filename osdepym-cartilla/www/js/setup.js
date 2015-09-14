@@ -20,20 +20,35 @@ OSDEPYM.namespace = function(name) {
   return parent;
 };
 
-OSDEPYM.configuration = (function() {
-  var useFakeData = true;
-  var searchRadiumInMeters = 1000;
+OSDEPYM.configuration = {
+  useDataBase: false,
+  searchRadiumInMeters: 1000
+};
 
-  var constructor = function() { };
+OSDEPYM.Cartilla = (function(configuration) {
+  var instance;
 
-  constructor.prototype.getDataProvider = function() {
-   return useFakeData ?
-     new OSDEPYM.data.StaticDataProvider() :
-     new OSDEPYM.data.DataBaseDataProvider();
+  function initialize(data) {
+    var dataProvider;
+
+    if(configuration.useDataBase && data && data.sqlite && data.q) {
+      var dataBase = new OSDEPYM.data.DataBase(data.sqlite, data.q);
+
+      dataProvider = new OSDEPYM.data.DataBaseDataProvider(dataBase);
+    } else {
+      dataProvider = new OSDEPYM.data.StaticDataProvider();
+    }
+
+    return new OSDEPYM.services.DataService(dataProvider);
   };
-  constructor.prototype.getSearchRadium = function() {
-    return searchRadiumInMeters;
-  };
 
-  return constructor;
-}());
+  return {
+      getInstance: function (data) {
+        if (!instance) {
+          instance = initialize(data);
+        }
+
+        return instance;
+      }
+  };
+}(OSDEPYM.configuration));
