@@ -8,89 +8,91 @@ OSDEPYM.services.DataService = (function(configuration) {
     //TODO: Code this method base on current coordinates and radium
   };
 
-  return {
-      getAfiliado: function(dni) {
-        var afiliados = dataProvider.getAfiliados();
-        var max;
+  var constructor = function() { };
 
-        for(var i = 0; max = afiliados.length; i += 1) {
-          if(afiliados[i].getDNI() === dni) {
-            return afiliados[i];
-          }
+  constructor.prototype.getAfiliado = function(dni) {
+    var afiliados = dataProvider.getAfiliados();
+    var max;
+
+    for(var i = 0; max = afiliados.length; i += 1) {
+      if(afiliados[i].getDNI() === dni) {
+        return afiliados[i];
+      }
+    }
+
+    return null;
+  };
+  constructor.prototype.getEspecialidades = function() {
+    return dataProvider.getEspecialidades();
+  };
+  constructor.prototype.getLocalidades = function() {
+    return dataProvider.getLocalidades();
+  };
+  constructor.prototype.getProvincias = function() {
+    return dataProvider.getProvincias();
+  };
+  constructor.prototype.getPrestadoresByEspecialidad = function(especialidad, localidad, provincia) {
+    var prestadores = dataProvider.getPrestadores();
+    var max;
+    var result = [];
+    var j = 0;
+
+    for(var i = 0; max = prestadores.length; i += 1) {
+      var valid = true;
+
+      if(prestadores[i].getEspecialidad() === especialidad) {
+        if(provincia && prestadores[i].getProvincia() !== provincia) {
+            valid = false;
         }
 
-        return null;
-      },
-      getEspecialidades: function() {
-        return dataProvider.getEspecialidades();
-      },
-      getLocalidades: function() {
-        return dataProvider.getLocalidades();
-      },
-      getProvincias: function() {
-        return dataProvider.getProvincias();
-      },
-      getPrestadoresByEspecialidad: function(especialidad, localidad, provincia) {
-        var prestadores = dataProvider.getPrestadores();
-        var max;
-        var result = [];
-        var j = 0;
-
-        for(var i = 0; max = prestadores.length; i += 1) {
-          var valid = true;
-
-          if(prestadores[i].getEspecialidad() === especialidad) {
-            if(provincia && prestadores[i].getProvincia() !== provincia) {
-                valid = false;
-            }
-
-            if(valid && localidad) {
-              if(prestadores[i].getLocalidad() !== localidad) {
-                valid = false;
-              }
-            }
-          } else {
+        if(valid && localidad) {
+          if(prestadores[i].getLocalidad() !== localidad) {
             valid = false;
           }
-
-          if(valid) {
-            result[j] = prestadores[i];
-            j += 1;
-          }
         }
+      } else {
+        valid = false;
+      }
 
-        return result;
-      },
-      getPrestadoresByNombre: function(nombre) {
-        var prestadores = dataProvider.getPrestadores();
-        var max;
-        var result = [];
-        var j = 0;
+      if(valid) {
+        result[j] = prestadores[i];
+        j += 1;
+      }
+    }
 
-        for(var i = 0; max = prestadores.length; i += 1) {
-          if(prestadores[i].getNombre() === nombre) {
-            result[j] = prestadores[i];
-            j += 1;
-          }
-        }
-
-        return result;
-      },
-      getPrestadoresByCercania: function(especialidad) {
-          var prestadores = dataProvider.getPrestadores();
-          var max;
-          var result = [];
-          var j = 0;
-
-          for(var i = 0; max = prestadores.length; i += 1) {
-            if(prestadores[i].getEspecialidad() === especialidad && isInZone(prestadores[i])) {
-              result[j] = prestadores[i];
-              j += 1;
-            }
-          }
-
-          return result;
-        }
+    return result;
   };
+  constructor.prototype.getPrestadoresByNombre = function(nombre) {
+    var prestadores = dataProvider.getPrestadores();
+    var max;
+    var result = [];
+    var j = 0;
+
+    for(var i = 0; max = prestadores.length; i += 1) {
+      if(prestadores[i].getNombre() === nombre) {
+        result[j] = prestadores[i];
+        j += 1;
+      }
+    }
+
+    return result;
+  };
+  constructor.prototype.getPrestadoresByCercania = function(especialidad) {
+    var prestadores = dataProvider.getPrestadores();
+    var max;
+    var result = [];
+    var j = 0;
+
+    for(var i = 0; max = prestadores.length; i += 1) {
+      if(prestadores[i].getEspecialidad() === especialidad && isInZone(prestadores[i])) {
+        result[j] = prestadores[i];
+        j += 1;
+      }
+    }
+
+    return result;
+  };
+
+  return constructor;
 }(OSDEPYM.configuration));
 

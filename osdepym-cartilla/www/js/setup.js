@@ -24,14 +24,16 @@ OSDEPYM.configuration = (function() {
   var useFakeData = true;
   var searchRadiumInMeters = 1000;
 
-  return {
-    getDataProvider: function() {
-      return useFakeData ?
-        new OSDEPYM.data.StaticDataProvider() :
-        new OSDEPYM.data.DataBaseDataProvider();
-    },
-    getSearchRadium: function() {
-      return searchRadiumInMeters;
-    }
+  var constructor = function() { };
+
+  constructor.prototype.getDataProvider = function() {
+   return useFakeData ?
+     new OSDEPYM.data.StaticDataProvider() :
+     new OSDEPYM.data.DataBaseDataProvider();
   };
+  constructor.prototype.getSearchRadium = function() {
+    return searchRadiumInMeters;
+  };
+
+  return constructor;
 }());
