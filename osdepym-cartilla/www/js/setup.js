@@ -21,5 +21,34 @@ OSDEPYM.namespace = function(name) {
 };
 
 OSDEPYM.configuration = {
+  useDataBase: false,
   searchRadiumInMeters: 1000
 };
+
+OSDEPYM.service = (function(configuration) {
+  var instance;
+
+  function initialize(sqlite, q) {
+    var dataProvider;
+
+    if(configuration.useDataBase && sqlite && q) {
+      var dataBase = new OSDEPYM.data.DataBase(sqlite, q);
+
+      dataProvider = new OSDEPYM.data.DataBaseDataProvider(dataBase);
+    } else {
+      dataProvider = new OSDEPYM.data.StaticDataProvider();
+    }
+
+    return new OSDEPYM.services.DataService(dataProvider);
+  };
+
+  return {
+      getInstance: function (sqlite, q) {
+        if (!instance) {
+          instance = initialize(sqlite, q);
+        }
+
+        return instance;
+      }
+  };
+}(OSDEPYM.configuration));
