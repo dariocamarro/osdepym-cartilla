@@ -1,3 +1,45 @@
+OSDEPYM.namespace("OSDEPYM.data.DataBase");
+
+OSDEPYM.data.DataBase = (function() {
+  var dbName = "osdepym.db";
+  var constructor = function(sqlite, q) {
+    this.provider = sqlite;
+    this.q = q;
+    this.db = this.provider.openDB();
+  };
+
+  constructor.prototype.query = function (query, parameters) {
+    var params = parameters || [];
+    var deferred = this.q.defer();
+
+    this.provider.execute(this.db, query, parameters)
+      .then(function (result) {
+        deferred.resolve(result);
+      }, function (error) {
+        //TODO: Error handling
+        deferred.reject(error);
+      });
+
+    return deferred.promise;
+  };
+
+  constructor.prototype.getAll = function(result) {
+    var output = [];
+
+    for (var i = 0; i < result.rows.length; i++) {
+     output.push(result.rows.item(i));
+    }
+
+    return output;
+  };
+
+  constructor.prototype.getFirst = function(result) {
+    return result && result.rows ? result.rows.item(0) : null;
+  };
+
+  return constructor;
+}());
+
 OSDEPYM.namespace("OSDEPYM.data.StaticDataProvider");
 
 OSDEPYM.data.StaticDataProvider = (function() {
@@ -31,15 +73,19 @@ OSDEPYM.data.StaticDataProvider = (function() {
   constructor.prototype.getAfiliados = function() {
     return afiliados;
   };
+
   constructor.prototype.getEspecialidades = function() {
       return especialidades;
   };
+
   constructor.prototype.getLocalidades = function() {
     return localidades;
   };
+
   constructor.prototype.getProvincias = function() {
     return provincias;
   };
+
   constructor.prototype.getPrestadores = function() {
     return prestadores;
   };
@@ -50,23 +96,48 @@ OSDEPYM.data.StaticDataProvider = (function() {
 OSDEPYM.namespace("OSDEPYM.data.DataBaseDataProvider");
 
 OSDEPYM.data.DataBaseDataProvider = (function() {
-  //TODO: Figure out how to get data from a DB (SQLite or whatever DB we use)
-  var constructor = function() { };
+  var constructor = function(database) {
+    this.database = database;
+  };
 
   constructor.prototype.getAfiliados = function() {
-    return [];
+    return this.database
+      .query("SELECT * FROM afiliados")
+      .then(function(result){
+        return this.database.getAll(result);
+      });
   };
+
   constructor.prototype.getEspecialidades = function() {
-      return [];
+    return this.database
+      .query("SELECT * FROM especialidades")
+      .then(function(result){
+        return this.database.getAll(result);
+      });
   };
+
   constructor.prototype.getLocalidades = function() {
-    return [];
+    return this.database
+      .query("SELECT * FROM localidades")
+      .then(function(result){
+        return this.database.getAll(result);
+      });
   };
+
   constructor.prototype.getProvincias = function() {
-    return [];
+    return this.database
+      .query("SELECT * FROM provincias")
+      .then(function(result){
+        return this.database.getAll(result);
+      });
   };
+
   constructor.prototype.getPrestadores = function() {
-    return [];
+    return this.database
+      .query("SELECT * FROM prestadores")
+      .then(function(result){
+        return this.database.getAll(result);
+      });
   };
 
   return constructor;

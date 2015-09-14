@@ -20,20 +20,6 @@ OSDEPYM.namespace = function(name) {
   return parent;
 };
 
-OSDEPYM.configuration = (function() {
-  var useFakeData = true;
-  var searchRadiumInMeters = 1000;
-
-  var constructor = function() { };
-
-  constructor.prototype.getDataProvider = function() {
-   return useFakeData ?
-     new OSDEPYM.data.StaticDataProvider() :
-     new OSDEPYM.data.DataBaseDataProvider();
-  };
-  constructor.prototype.getSearchRadium = function() {
-    return searchRadiumInMeters;
-  };
-
-  return constructor;
-}());
+OSDEPYM.configuration = {
+  searchRadiumInMeters: 1000
+};

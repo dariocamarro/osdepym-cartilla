@@ -1,17 +1,18 @@
 OSDEPYM.namespace("OSDEPYM.services.DataService");
 
 OSDEPYM.services.DataService = (function(configuration) {
-  var dataProvider = configuration.getDataProvider();
   var isInZone = function(prestador) {
     var currentCoordinates = "";
 
     //TODO: Code this method base on current coordinates and radium
   };
 
-  var constructor = function() { };
+  var constructor = function(dataProvider) {
+    this.dataProvider = dataProvider;
+  };
 
   constructor.prototype.getAfiliado = function(dni) {
-    var afiliados = dataProvider.getAfiliados();
+    var afiliados = this.dataProvider.getAfiliados();
     var max;
 
     for(var i = 0; max = afiliados.length; i += 1) {
@@ -22,17 +23,21 @@ OSDEPYM.services.DataService = (function(configuration) {
 
     return null;
   };
+
   constructor.prototype.getEspecialidades = function() {
-    return dataProvider.getEspecialidades();
+    return this.dataProvider.getEspecialidades();
   };
+
   constructor.prototype.getLocalidades = function() {
-    return dataProvider.getLocalidades();
+    return this.dataProvider.getLocalidades();
   };
+
   constructor.prototype.getProvincias = function() {
-    return dataProvider.getProvincias();
+    return this.dataProvider.getProvincias();
   };
+
   constructor.prototype.getPrestadoresByEspecialidad = function(especialidad, localidad, provincia) {
-    var prestadores = dataProvider.getPrestadores();
+    var prestadores = this.dataProvider.getPrestadores();
     var max;
     var result = [];
     var j = 0;
@@ -62,8 +67,9 @@ OSDEPYM.services.DataService = (function(configuration) {
 
     return result;
   };
+
   constructor.prototype.getPrestadoresByNombre = function(nombre) {
-    var prestadores = dataProvider.getPrestadores();
+    var prestadores = this.dataProvider.getPrestadores();
     var max;
     var result = [];
     var j = 0;
@@ -77,8 +83,9 @@ OSDEPYM.services.DataService = (function(configuration) {
 
     return result;
   };
+
   constructor.prototype.getPrestadoresByCercania = function(especialidad) {
-    var prestadores = dataProvider.getPrestadores();
+    var prestadores = this.dataProvider.getPrestadores();
     var max;
     var result = [];
     var j = 0;
