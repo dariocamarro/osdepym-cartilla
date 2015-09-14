@@ -53,9 +53,6 @@ OSDEPYM.data.DataBaseDataProvider = (function() {
     getAfiliados: function() {
       return [];
     },
-    getAfiliado: function(dni) {
-      return null;
-    },
     getEspecialidades: function() {
       return [];
     },
