@@ -26,44 +26,48 @@ OSDEPYM.data.StaticDataProvider = (function() {
     new OSDEPYM.model.Prestador("Dario Camarro", "Ginecología", "Belgrano 980", "Paso de Los Libres", "Corrientes", "1290", "", "")
   ];
 
-  return {
-    getAfiliados: function() {
-      return afiliados;
-    },
-    getEspecialidades: function() {
-      return especialidades;
-    },
-    getLocalidades: function() {
-      return localidades;
-    },
-    getProvincias: function() {
-      return provincias;
-    },
-    getPrestadores: function() {
-      return prestadores;
-    }
+  var constructor = function() { };
+
+  constructor.prototype.getAfiliados = function() {
+    return afiliados;
   };
+  constructor.prototype.getEspecialidades = function() {
+      return especialidades;
+  };
+  constructor.prototype.getLocalidades = function() {
+    return localidades;
+  };
+  constructor.prototype.getProvincias = function() {
+    return provincias;
+  };
+  constructor.prototype.getPrestadores = function() {
+    return prestadores;
+  };
+
+  return constructor;
 }());
 
 OSDEPYM.namespace("OSDEPYM.data.DataBaseDataProvider");
 
 OSDEPYM.data.DataBaseDataProvider = (function() {
   //TODO: Figure out how to get data from a DB (SQLite or whatever DB we use)
-  return {
-    getAfiliados: function() {
-      return [];
-    },
-    getEspecialidades: function() {
-      return [];
-    },
-    getLocalidades: function() {
-      return [];
-    },
-    getProvincias: function() {
-      return [];
-    },
-    getPrestadores: function() {
-      return [];
-    }
+  var constructor = function() { };
+
+  constructor.prototype.getAfiliados = function() {
+    return [];
   };
+  constructor.prototype.getEspecialidades = function() {
+      return [];
+  };
+  constructor.prototype.getLocalidades = function() {
+    return [];
+  };
+  constructor.prototype.getProvincias = function() {
+    return [];
+  };
+  constructor.prototype.getPrestadores = function() {
+    return [];
+  };
+
+  return constructor;
 }());
