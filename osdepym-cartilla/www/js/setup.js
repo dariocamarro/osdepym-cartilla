@@ -25,14 +25,14 @@ OSDEPYM.configuration = {
   searchRadiumInMeters: 1000
 };
 
-OSDEPYM.service = (function(configuration) {
+OSDEPYM.Cartilla = (function(configuration) {
   var instance;
 
-  function initialize(sqlite, q) {
+  function initialize(data) {
     var dataProvider;
 
-    if(configuration.useDataBase && sqlite && q) {
-      var dataBase = new OSDEPYM.data.DataBase(sqlite, q);
+    if(configuration.useDataBase && data && data.sqlite && data.q) {
+      var dataBase = new OSDEPYM.data.DataBase(data.sqlite, data.q);
 
       dataProvider = new OSDEPYM.data.DataBaseDataProvider(dataBase);
     } else {
@@ -43,9 +43,9 @@ OSDEPYM.service = (function(configuration) {
   };
 
   return {
-      getInstance: function (sqlite, q) {
+      getInstance: function (data) {
         if (!instance) {
-          instance = initialize(sqlite, q);
+          instance = initialize(data);
         }
 
         return instance;
